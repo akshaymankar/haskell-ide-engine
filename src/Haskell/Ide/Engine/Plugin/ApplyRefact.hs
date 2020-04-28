@@ -37,6 +37,7 @@ import           Language.Haskell.HLint            as Hlint
 import qualified Language.Haskell.LSP.Types        as LSP
 import qualified Language.Haskell.LSP.Types.Lens   as LSP
 import           Refact.Apply
+import           HSE.All
 
 -- ---------------------------------------------------------------------
 {-# ANN module ("HLint: ignore Eta reduce"         :: String) #-}
