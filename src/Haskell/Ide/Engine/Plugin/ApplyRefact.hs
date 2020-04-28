@@ -37,7 +37,6 @@ import           Language.Haskell.HLint            as Hlint
 import qualified Language.Haskell.LSP.Types        as LSP
 import qualified Language.Haskell.LSP.Types.Lens   as LSP
 import           Refact.Apply
-import           HSE.All
 
 -- ---------------------------------------------------------------------
 {-# ANN module ("HLint: ignore Eta reduce"         :: String) #-}
@@ -143,8 +142,8 @@ lint uri = pluginGetFile "lint: " uri $ \fp -> do
 runLint :: FilePath -> [String] -> ExceptT [Diagnostic] IO [Idea]
 runLint fp args = do
   (flags,classify,hint) <- liftIO $ argsSettings args
-  let myflags = flags { hseFlags = (hseFlags flags) { extensions = EnableExtension TypeApplications:extensions (hseFlags flags)}}
-  res <- bimapExceptT parseErrorToDiagnostic id $ ExceptT $ parseModuleEx myflags fp Nothing
+  -- let myflags = flags { hseFlags = (hseFlags flags) { extensions = EnableExtension TypeApplications:extensions (hseFlags flags)}}
+  res <- bimapExceptT parseErrorToDiagnostic id $ ExceptT $ parseModuleEx flags fp Nothing
   pure $ applyHints classify hint [res]
 
 parseErrorToDiagnostic :: Hlint.ParseError -> [Diagnostic]
@@ -301,8 +300,8 @@ hlintOpts lintFile mpos =
 runHlint :: MonadIO m => FilePath -> [String] -> ExceptT String m [Idea]
 runHlint fp args =
   do (flags,classify,hint) <- liftIO $ argsSettings args
-     let myflags = flags { hseFlags = (hseFlags flags) { extensions = EnableExtension TypeApplications:extensions (hseFlags flags)}}
-     res <- bimapExceptT showParseError id $ ExceptT $ liftIO $ parseModuleEx myflags fp Nothing
+     -- let myflags = flags { hseFlags = (hseFlags flags) { extensions = EnableExtension TypeApplications:extensions (hseFlags flags)}}
+     res <- bimapExceptT showParseError id $ ExceptT $ liftIO $ parseModuleEx flags fp Nothing
      pure $ applyHints classify hint [res]
 
 showParseError :: Hlint.ParseError -> String
